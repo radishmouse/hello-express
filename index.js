@@ -24,13 +24,34 @@ app.get('/albums/:albumId', (req, res) => {
 });
 
 // /albums/42/songs 
-// "the songs for album 42"
+app.get('/albums/:albumId/songs', (req, res) => {
+    // "the songs for album 42"
+    res.send(`the songs for album ${req.params.albumId}`);
+});
 
 // /albums/42/songs/3
-// "song 3 on album 42"
+app.get('/albums/:albumId/songs/:songId(\\d+)', (req, res) => {
+    // "song 3 on album 42"
+   res.send(`song ${req.params.songId} on album ${req.params.albumId}`); 
+});
 
+app.get('/albums/:albumId/songs/guest', (req, res) => {
+    res.send('It had the best guest artists ever.');
+});
+
+// important: leading slash
+// also important: order!
 
 // add a catch-all
+// - order matters. if this route handler is run by express
+//   that means nothing above matched
+// - '*' will match anything
+// - res has methods....
+
+app.get('*', (req, res) => {
+    console.log("Redirecting, because no page here.");
+    res.redirect('/albums');
+})
 
 server.listen(PORT, () => {
     console.log(`Listening on ${PORT}`);
